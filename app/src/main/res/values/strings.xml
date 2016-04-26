@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">旅游助手</string>
+    <string name="attraction">景点</string>
+    <string name="strategy">攻略</string>
+    <string name="travelogue">游记</string>
+    <string name="mine">我的</string>
+    <string name="action_scan">搜索</string>
+    <string name="action_notifications">通知</string>
+    <string name="action_settings">设置</string>
+    <string name="action_about">关于</string>
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="phone_num">手机号</string>
+    <string name="password">密码</string>
+    <string name="name">姓名</string>
+    <string name="verify_sms_code">请输入短信验证码</string>
+    <string name="re_send">重发验证码</string>
+    <string name="phoneNumOrUserName">手机号/用户名</string>
+</resources>
