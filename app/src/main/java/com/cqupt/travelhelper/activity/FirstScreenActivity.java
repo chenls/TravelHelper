@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 
 import com.cqupt.travelhelper.R;
+
 public class FirstScreenActivity extends AppCompatActivity {
 
     @SuppressLint("HandlerLeak")
@@ -22,7 +23,7 @@ public class FirstScreenActivity extends AppCompatActivity {
                         WelcomeActivity.class));
                 finish();
             }
-        }.sendEmptyMessageDelayed(0, 1000);
+        }.sendEmptyMessageDelayed(0, 10);//TODO 开发完成时，把10更新为1000
     }
 
     @Override

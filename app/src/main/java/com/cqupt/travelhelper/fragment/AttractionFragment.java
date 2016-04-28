@@ -1,109 +1,95 @@
 package com.cqupt.travelhelper.fragment;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.cqupt.travelhelper.adapter.AttractionAdapter;
 import com.cqupt.travelhelper.R;
-import com.cqupt.travelhelper.dummy.DummyContent;
-import com.cqupt.travelhelper.dummy.DummyContent.DummyItem;
+import com.cqupt.travelhelper.adapter.AttractionAdapter;
+import com.cqupt.travelhelper.module.Attraction;
+import com.cqupt.travelhelper.utils.CommonUtil;
+import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.bmob.v3.BmobQuery;
+import cn.bmob.v3.listener.FindListener;
+
 public class AttractionFragment extends Fragment {
 
-    // TODO: Customize parameter argument names
-    private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
-    private int mColumnCount = 1;
-    private OnListFragmentInteractionListener mListener;
-
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
-    public AttractionFragment() {
-    }
-
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
-    public static AttractionFragment newInstance(int columnCount) {
-        AttractionFragment fragment = new AttractionFragment();
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
-    }
+    private AttractionAdapter adapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private int allIndex;
+    private List<Attraction> allAttractionList = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attraction_list, container, false);
+        final PullLoadMoreRecyclerView mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView)
+                view.findViewById(R.id.pullLoadMoreRecyclerView);
+        swipeRefreshLayout = mPullLoadMoreRecyclerView.getSwipeRefreshLayout();
+        mPullLoadMoreRecyclerView.setGridLayout(2);     //设置网格布局
+        adapter = new AttractionAdapter();
+        mPullLoadMoreRecyclerView.setAdapter(adapter);
+        queryAttraction(false, 0);
+        mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
+                new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+                    @Override
+                    public void onRefresh() {
+                        queryAttraction(true, 0);
+                        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    }
 
-        // Set the adapter
-        if (view instanceof RecyclerView) {
-            Context context = view.getContext();
-            RecyclerView recyclerView = (RecyclerView) view;
-            if (mColumnCount <= 1) {
-                recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            } else {
-                recyclerView.setLayoutManager(new GridLayoutManager(context, mColumnCount));
-            }
-            recyclerView.setAdapter(new AttractionAdapter(DummyContent.ITEMS, mListener));
-        }
+                    @Override
+                    public void onLoadMore() {
+                        queryAttraction(false, allIndex);
+                        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                    }
+                });
         return view;
     }
 
+    private void queryAttraction(boolean refresh, int index) {
 
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnListFragmentInteractionListener) {
-            mListener = (OnListFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnListFragmentInteractionListener");
+        if (!CommonUtil.checkNetState(getActivity())) {
+            swipeRefreshLayout.setRefreshing(false);
+            return;
         }
-    }
+        final BmobQuery<Attraction> bmobQuery = new BmobQuery<>();
+        bmobQuery.setSkip(index);
+        bmobQuery.setLimit(6);
+        bmobQuery.order("updatedAt"); //按更新时间排序
+        //先判断是否强制刷新
+        if (refresh) {
+            bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);        // 强制在从网络中获取
+        } else {
+            //先判断是否有缓存
+            boolean isCache = bmobQuery.hasCachedResult(getActivity(), Attraction.class);
+            if (isCache) {
+                bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);    // 先从缓存取数据，如果没有的话，再从网络取。
+            } else {
+                bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则先从网络中取
+            }
+        }
+        bmobQuery.findObjects(getActivity(), new FindListener<Attraction>() {
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+            @Override
+            public void onSuccess(List<Attraction> attractionList) {
+                allIndex = allIndex + 6;
+                allAttractionList.addAll(attractionList);
+                adapter.setAttractionList(allAttractionList);
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p/>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
-    public interface OnListFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onListFragmentInteraction(DummyItem item);
+            @Override
+            public void onError(int code, String msg) {
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 }
