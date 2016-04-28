@@ -1,16 +1,18 @@
 package com.cqupt.travelhelper.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
+import com.cqupt.travelhelper.activity.AttractionDetailsActivity;
 import com.cqupt.travelhelper.module.Attraction;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        Attraction attraction = attractionList.get(position);
+        final Attraction attraction = attractionList.get(position);
         final Context context = holder.itemView.getContext();
         Glide.with(context)
                 .load(attraction.getPicture().getFileUrl(context))
@@ -40,8 +42,12 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.Vi
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, holder.getAdapterPosition() + "",
-                        Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, AttractionDetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("attraction", attraction);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+
             }
         });
     }

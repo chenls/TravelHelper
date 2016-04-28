@@ -16,4 +16,9 @@
     <string name="verify_sms_code">请输入短信验证码</string>
     <string name="re_send">重发验证码</string>
     <string name="phoneNumOrUserName">手机号/用户名</string>
+    <string name="price_title">收费价格</string>
+    <string name="open_time_title">开放时间</string>
+    <string name="mAbstract_title">景点简介</string>
+    <string name="description_title">景点详情</string>
+    <string name="comment_title">景点评论</string>
 </resources>

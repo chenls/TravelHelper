@@ -59,7 +59,6 @@
         </receiver>
         <!-- bmob推送相关结束 -->
 
-
         <activity
             android:name=".activity.FirstScreenActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar.FullScreen">
@@ -72,12 +71,10 @@
         <activity
             android:name=".activity.WelcomeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.MainActivity"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".activity.NotifyActivity"
             android:label="@string/action_notifications">
@@ -85,6 +82,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.AttractionDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>
