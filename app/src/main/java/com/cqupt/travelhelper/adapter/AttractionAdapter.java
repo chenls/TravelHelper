@@ -44,6 +44,7 @@ public class AttractionAdapter extends RecyclerView.Adapter<AttractionAdapter.Vi
             public void onClick(View v) {
                 Intent intent = new Intent(context, AttractionDetailsActivity.class);
                 Bundle bundle = new Bundle();
+                attraction.setMyId(attraction.getObjectId());
                 bundle.putParcelable("attraction", attraction);
                 intent.putExtras(bundle);
                 context.startActivity(intent);

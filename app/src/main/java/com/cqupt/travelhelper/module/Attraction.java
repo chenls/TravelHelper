@@ -8,10 +8,11 @@ import cn.bmob.v3.BmobObject;
 import cn.bmob.v3.datatype.BmobFile;
 
 public class Attraction extends BmobObject implements Parcelable {
-    String name, mAbstract, star, description, open_time, price;
+    String myId, name, mAbstract, star, description, open_time, price;
     BmobFile picture;
 
     protected Attraction(Parcel in) {
+        myId = in.readString();
         picture = (BmobFile) in.readSerializable();
         name = in.readString();
         mAbstract = in.readString();
@@ -32,6 +33,14 @@ public class Attraction extends BmobObject implements Parcelable {
             return new Attraction[size];
         }
     };
+
+    public String getMyId() {
+        return myId;
+    }
+
+    public void setMyId(String myId) {
+        this.myId = myId;
+    }
 
     public String getName() {
         return name;
@@ -76,6 +85,7 @@ public class Attraction extends BmobObject implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(myId);
         dest.writeSerializable(picture);
         dest.writeString(name);
         dest.writeString(mAbstract);

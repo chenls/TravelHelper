@@ -21,4 +21,9 @@
     <string name="mAbstract_title">景点简介</string>
     <string name="description_title">景点详情</string>
     <string name="comment_title">景点评论</string>
+    <string name="sure">确定</string>
+    <string name="score">评分：</string>
+    <string name="comment_hint">请输入评价</string>
+    <string name="add_comment">添加评论</string>
+    <string name="no_comment">暂无评论</string>
 </resources>

@@ -84,7 +84,10 @@
         </activity>
         <activity
             android:name=".activity.AttractionDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.CommentActivity"
+            android:label="@string/add_comment" />
     </application>
 
 </manifest>
