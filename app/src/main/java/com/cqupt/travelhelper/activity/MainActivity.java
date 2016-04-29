@@ -1,7 +1,9 @@
 package com.cqupt.travelhelper.activity;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v13.app.FragmentPagerAdapter;
@@ -19,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
     ViewPager viewPager;
     Toolbar toolBar;
+    private final MineFragment mineFragment = new MineFragment();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         toolBar = (Toolbar) findViewById(R.id.toolBar);
         setSupportActionBar(toolBar);
+
         viewPager.setAdapter(new FragmentPagerAdapter(getFragmentManager()) {
             @Override
             public int getCount() {
@@ -40,9 +44,11 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         return new AttractionFragment();
                     case 1:
+                        return new AttractionFragment();
                     case 2:
+                        return new AttractionFragment();
                     case 3:
-                        return new MineFragment();
+                        return mineFragment;
                     default:
                         return new AttractionFragment();
                 }
@@ -94,5 +100,16 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1) {
+                Bitmap bitmap = data.getParcelableExtra("picture");
+                String name = data.getStringExtra("name");
+                mineFragment.changeInformation(bitmap, name);
+            }
+        }
     }
 }

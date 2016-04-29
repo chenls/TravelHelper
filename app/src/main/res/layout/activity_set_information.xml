@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorBackground"
     android:paddingBottom="16dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
@@ -26,7 +25,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:padding="15dp"
-                android:src="@mipmap/ic_face"
+                android:src="@drawable/ic_face"
                 tools:ignore="ContentDescription" />
 
             <com.cqupt.travelhelper.utils.RoundImageView xmlns:myxmlns="http://schemas.android.com/apk/"
@@ -39,6 +38,7 @@
                 android:layout_toRightOf="@+id/imageView"
                 android:contentDescription="@string/change_face"
                 android:padding="15dp"
+                android:src="@mipmap/ic_face"
                 myxmlns:border_color="@color/colorWhite"
                 myxmlns:border_width="2dp" />
 
@@ -65,7 +65,7 @@
                 android:layout_height="wrap_content"
                 android:contentDescription="@string/name"
                 android:padding="15dp"
-                android:src="@mipmap/ic_catchphrase" />
+                android:src="@drawable/ic_name" />
 
             <EditText
                 android:id="@+id/et_name"
@@ -85,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="15dp"
-                android:src="@mipmap/ic_catchphrase"
+                android:src="@drawable/ic_phone"
                 tools:ignore="ContentDescription" />
 
             <EditText

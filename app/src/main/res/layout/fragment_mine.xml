@@ -20,8 +20,7 @@
                 android:layout_height="80dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-
+                android:layout_marginTop="25dp"
                 myxmlns:border_color="@color/colorWhite"
                 myxmlns:border_width="2dp" />
 

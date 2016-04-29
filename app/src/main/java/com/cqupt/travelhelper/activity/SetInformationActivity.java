@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,13 +47,14 @@ public class SetInformationActivity extends AppCompatActivity {
     private boolean IS_CHANGE_FACE;
     private ProgressDialog progressDialog;
     private Bitmap photo;
+    private MyUser myUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set_information);
         iv_face = (ImageView) findViewById(R.id.iv_face);
-        MyUser myUser = MyUser.getCurrentUser(SetInformationActivity.this, MyUser.class);
+        myUser = MyUser.getCurrentUser(SetInformationActivity.this, MyUser.class);
         BmobFile pic = myUser.getPic();
         if (pic != null) {
             Glide.with(SetInformationActivity.this)
@@ -216,6 +216,7 @@ public class SetInformationActivity extends AppCompatActivity {
 
                 @Override
                 public void onSuccess() {
+                    progressDialog.dismiss();
                     Toast.makeText(SetInformationActivity.this, "完成修改", Toast.LENGTH_SHORT).show();
                     returnData();
                 }
@@ -227,6 +228,7 @@ public class SetInformationActivity extends AppCompatActivity {
                 }
             });
         } else {
+            progressDialog.dismiss();
             Toast.makeText(SetInformationActivity.this, "请重新登录", Toast.LENGTH_SHORT).show();
         }
     }
@@ -236,16 +238,12 @@ public class SetInformationActivity extends AppCompatActivity {
                 .upload(picture_file.getAbsolutePath(), new UploadListener() {
                     @Override
                     public void onSuccess(String fileName, String url, BmobFile file) {
-                        Log.i("smile", "新版文件服务的fileName = " + fileName + ",新版文件服务的url =" + url);
-                        if (file != null) {
-                            Log.i("smile", "兼容旧版文件服务的源文件名 = " + file.getFilename() + ",文件地址url = " + file.getUrl());
-                        }
                         updateUser(file); //图片绑定到用户上
+                        myUser.setPic(file);
                     }
 
                     @Override
                     public void onProgress(int ratio) {
-                        Log.i("smile", "MainActivity -onProgress :" + ratio);
                     }
 
                     @Override
@@ -260,13 +258,8 @@ public class SetInformationActivity extends AppCompatActivity {
     private void returnData() {
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("picture", photo);
+        intent.putExtra("name", et_name.getText().toString().trim());
         setResult(RESULT_OK, intent);
         finish();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        progressDialog.dismiss();
     }
 }

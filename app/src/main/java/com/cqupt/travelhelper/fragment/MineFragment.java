@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,6 @@ import cn.bmob.v3.datatype.BmobFile;
 public class MineFragment extends Fragment {
     private ImageView pic;
     private TextView name;
-    private LinearLayout downloadComment;
-    private LinearLayout mineDownload;
-    private LinearLayout addTravel;
-    private LinearLayout settings;
-    private LinearLayout about;
-    private LinearLayout logout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -39,19 +34,19 @@ public class MineFragment extends Fragment {
         pic = (ImageView) view.findViewById(R.id.pic);
         pic.setImageResource(R.mipmap.ic_face);
         name = (TextView) view.findViewById(R.id.name);
-        downloadComment = (LinearLayout) view.findViewById(R.id.download_comment);
+        LinearLayout downloadComment = (LinearLayout) view.findViewById(R.id.download_comment);
         downloadComment.setOnClickListener(new MyOnClick());
-        mineDownload = (LinearLayout) view.findViewById(R.id.mine_download);
+        LinearLayout mineDownload = (LinearLayout) view.findViewById(R.id.mine_download);
         mineDownload.setOnClickListener(new MyOnClick());
-        addTravel = (LinearLayout) view.findViewById(R.id.add_travel);
+        LinearLayout addTravel = (LinearLayout) view.findViewById(R.id.add_travel);
         addTravel.setOnClickListener(new MyOnClick());
-        settings = (LinearLayout) view.findViewById(R.id.settings);
+        LinearLayout settings = (LinearLayout) view.findViewById(R.id.settings);
         settings.setOnClickListener(new MyOnClick());
-        about = (LinearLayout) view.findViewById(R.id.about);
+        LinearLayout about = (LinearLayout) view.findViewById(R.id.about);
         about.setOnClickListener(new MyOnClick());
-        logout = (LinearLayout) view.findViewById(R.id.logout);
+        LinearLayout logout = (LinearLayout) view.findViewById(R.id.logout);
         logout.setOnClickListener(new MyOnClick());
-        changeInformation(null);
+        changeInformation(null, null);
         pic.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,24 +105,29 @@ public class MineFragment extends Fragment {
         }
     }
 
-    private void changeInformation(Bitmap bitmap) {
+    public void changeInformation(Bitmap bitmap, String nameValue) {
+        MyUser myUser = MyUser.getCurrentUser(getActivity(), MyUser.class);
         if (bitmap != null) {
             pic.setImageBitmap(bitmap);
+        } else {
+            BmobFile pic = myUser.getPic();
+            if (pic != null) {
+                String url = pic.getFileUrl(getActivity());
+                setFaceImage(url);
+            }
         }
-        MyUser myUser = MyUser.getCurrentUser(getActivity(), MyUser.class);
-        BmobFile pic = myUser.getPic();
-        if (pic != null) {
-            String url = pic.getFileUrl(getActivity());
-            setFaceImage(url);
-        }
-        name.setText((String) MyUser.getObjectByKey(getActivity(), "username"));
+        if (nameValue != null)
+            name.setText(nameValue);
+        else
+            name.setText((String) MyUser.getObjectByKey(getActivity(), "username"));
     }
 
     private void setFaceImage(String url) {
+        Log.d("myLog", url);
         Glide.with(getActivity())
                 .load(url)
                 .centerCrop()
-                .placeholder(R.mipmap.ic_face)
+                .placeholder(R.mipmap.loading)
                 .into(pic);
     }
 }
