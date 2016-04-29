@@ -88,6 +88,9 @@
         <activity
             android:name=".activity.CommentActivity"
             android:label="@string/add_comment" />
+        <activity
+            android:name=".activity.SetInformationActivity"
+            android:label="@string/SetInformation" />
     </application>
 
 </manifest>

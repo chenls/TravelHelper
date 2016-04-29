@@ -72,10 +72,11 @@ public class Attraction extends BmobObject implements Parcelable {
 
     @Override
     public String toString() {
-        return "Attraction{" +
-                "name='" + name + '\'' +
-                ", picture=" + picture +
-                '}';
+        return "景点：" + name + "\n\n" +
+                "价格：" + price + "\n\n" +
+                "开放时间：" + open_time + "\n\n" +
+                "简介：" + mAbstract + "\n\n" +
+                "描述：" + description;
     }
 
     @Override

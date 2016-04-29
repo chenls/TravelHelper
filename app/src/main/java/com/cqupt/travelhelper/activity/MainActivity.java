@@ -13,6 +13,7 @@ import android.view.MenuItem;
 
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.fragment.AttractionFragment;
+import com.cqupt.travelhelper.fragment.MineFragment;
 
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     case 1:
                     case 2:
                     case 3:
+                        return new MineFragment();
                     default:
                         return new AttractionFragment();
                 }

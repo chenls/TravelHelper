@@ -26,4 +26,22 @@
     <string name="comment_hint">请输入评价</string>
     <string name="add_comment">添加评论</string>
     <string name="no_comment">暂无评论</string>
+    <string name="action_share">分享</string>
+    <string name="action_download">下载</string>
+    <string name="share_app">请选择</string>
+    <string name="share">【旅游助手】APP下载地址：https://www.pgyer.com/Trave\n\n</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="download_comment">离线内容</string>
+    <string name="mine_download">我的游记</string>
+    <string name="add_travel">发布游记</string>
+    <string name="change_face">修改头像</string>
+    <string name="picture">拍照</string>
+    <string name="choose">请选择</string>
+    <string name="gallery">相册</string>
+    <string name="SetInformation">编辑个人信息</string>
+    <string name="logout">退出</string>
+    <string name="sure_logout">是否确认退出登录</string>
+    <string name="cancel">取消</string>
 </resources>

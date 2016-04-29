@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -136,5 +138,28 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                 comment.setText(R.string.no_comment);
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.share, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                sharingIntent.setType("text/plain");
+                sharingIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share)
+                        + attraction.toString());
+                startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_app)));
+                break;
+            case R.id.action_download:
+                //TODO 保存对象
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
