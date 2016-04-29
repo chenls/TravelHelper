@@ -9,12 +9,10 @@ import android.support.v7.widget.Toolbar;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
@@ -130,9 +128,6 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                 }
                 int length = commentValue.length();
                 commentValue.delete(length - 2, length);//删除最后两个\n\n字符
-                Log.d("myLog", commentValue.toString() + commentValue.length());
-                Toast.makeText(AttractionDetailsActivity.this, "" + commentValue.toString()
-                        + commentValue.length(), Toast.LENGTH_SHORT).show();
                 comment.setText(commentValue);
             }
 

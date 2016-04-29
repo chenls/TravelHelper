@@ -2,6 +2,7 @@ package com.cqupt.travelhelper.fragment;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,14 +48,19 @@ public class AttractionFragment extends Fragment {
 
                     @Override
                     public void onLoadMore() {
-                        queryAttraction(false, allIndex);
-                        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                queryAttraction(false, allIndex);
+                                mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                            }
+                        },1000); //延时1秒，为了清楚的看到加载过程
                     }
                 });
         return view;
     }
 
-    private void queryAttraction(boolean refresh, int index) {
+    private void queryAttraction(final boolean refresh, int index) {
 
         if (!CommonUtil.checkNetState(getActivity())) {
             swipeRefreshLayout.setRefreshing(false);
@@ -62,8 +68,8 @@ public class AttractionFragment extends Fragment {
         }
         final BmobQuery<Attraction> bmobQuery = new BmobQuery<>();
         bmobQuery.setSkip(index);
-        bmobQuery.setLimit(6);
-        bmobQuery.order("updatedAt"); //按更新时间排序
+        bmobQuery.setLimit(8);
+        bmobQuery.order("createdAt"); //按创建时间排序
         //先判断是否强制刷新
         if (refresh) {
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);        // 强制在从网络中获取
@@ -80,7 +86,11 @@ public class AttractionFragment extends Fragment {
 
             @Override
             public void onSuccess(List<Attraction> attractionList) {
-                allIndex = allIndex + 6;
+                if (refresh) {
+                    allAttractionList.clear();
+                    allIndex = 0;
+                }
+                allIndex = allIndex + 8;
                 allAttractionList.addAll(attractionList);
                 adapter.setAttractionList(allAttractionList);
                 swipeRefreshLayout.setRefreshing(false);
