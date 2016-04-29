@@ -13,14 +13,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
-import com.cqupt.travelhelper.module.Attraction;
 import com.cqupt.travelhelper.module.Comment;
 import com.cqupt.travelhelper.module.MyComment;
+import com.cqupt.travelhelper.module.Strategy;
 import com.cqupt.travelhelper.utils.CommonUtil;
 
 import java.util.List;
@@ -28,14 +27,14 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.listener.FindListener;
 
-public class AttractionDetailsActivity extends AppCompatActivity {
+public class StrategyDetailsActivity extends AppCompatActivity {
 
-    private Attraction attraction;
+    private Strategy strategy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_attraction_details);
+        setContentView(R.layout.activity_strategy_details);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -48,17 +47,17 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         });
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        attraction = bundle.getParcelable("attraction");
-        assert attraction != null;
+        strategy = bundle.getParcelable("strategy");
+        assert strategy != null;
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(AttractionDetailsActivity.this, CommentActivity.class);
+                Intent intent = new Intent(StrategyDetailsActivity.this, CommentActivity.class);
                 Bundle bundle = new Bundle();
-                Comment comment = new Comment(attraction.getMyId(), attraction.getName()
-                        , attraction.getPrice(), attraction.getPicture());
+                Comment comment = new Comment(strategy.getMyId(), strategy.getName()
+                        , strategy.getPrice(), strategy.getPicture());
                 bundle.putParcelable("comment", comment);
                 intent.putExtras(bundle);
                 startActivity(intent);
@@ -66,47 +65,46 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         });
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
         assert collapsingToolbarLayout != null;
-        collapsingToolbarLayout.setTitle(attraction.getName());
+        collapsingToolbarLayout.setTitle(strategy.getName());
         ImageView picture = (ImageView) findViewById(R.id.picture);
         assert picture != null;
-//        picture.setImageResource(R.mipmap.loading);
-        Glide.with(AttractionDetailsActivity.this)
-                .load(attraction.getPicture().getFileUrl(AttractionDetailsActivity.this))
+        Glide.with(StrategyDetailsActivity.this)
+                .load(strategy.getPicture().getFileUrl(StrategyDetailsActivity.this))
                 .placeholder(R.mipmap.loading)
                 .into(picture);
-        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
         TextView price = (TextView) findViewById(R.id.price);
-        TextView open_time = (TextView) findViewById(R.id.open_time);
-        TextView mAbstract = (TextView) findViewById(R.id.mAbstract);
         TextView description = (TextView) findViewById(R.id.description);
-        assert ratingBar != null;
-        ratingBar.setRating(Float.parseFloat(attraction.getStar()));
+        TextView take_time = (TextView) findViewById(R.id.take_time);
+        TextView address = (TextView) findViewById(R.id.address);
+        TextView traffic = (TextView) findViewById(R.id.traffic);
+        assert traffic != null;
+        traffic.setText(strategy.getTraffic());
         assert price != null;
-        price.setText(attraction.getPrice());
-        assert open_time != null;
-        open_time.setText(attraction.getOpen_time());
-        assert mAbstract != null;
-        mAbstract.setText(attraction.getmAbstract());
+        price.setText(strategy.getPrice());
+        assert take_time != null;
+        take_time.setText(strategy.getTake_time());
+        assert address != null;
+        address.setText(strategy.getAddress());
         assert description != null;
-        description.setText(attraction.getDescription());
+        description.setText(strategy.getDescription());
         queryMyComment();
     }
 
     private void queryMyComment() {
-        if (!CommonUtil.checkNetState(AttractionDetailsActivity.this)) {
+        if (!CommonUtil.checkNetState(StrategyDetailsActivity.this)) {
             return;
         }
         final BmobQuery<MyComment> bmobQuery = new BmobQuery<>();
         bmobQuery.setLimit(100);
-        bmobQuery.addWhereEqualTo("dishObjectId", attraction.getMyId());
+        bmobQuery.addWhereEqualTo("dishObjectId", strategy.getMyId());
         bmobQuery.order("-updatedAt");
-        boolean isCache = bmobQuery.hasCachedResult(AttractionDetailsActivity.this, MyComment.class);
+        boolean isCache = bmobQuery.hasCachedResult(StrategyDetailsActivity.this, MyComment.class);
         if (isCache) {
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.CACHE_ELSE_NETWORK);    // 先从缓存取数据，如果没有的话，再从网络取。
         } else {
             bmobQuery.setCachePolicy(BmobQuery.CachePolicy.NETWORK_ELSE_CACHE);    // 如果没有缓存的话，则先从网络中取
         }
-        bmobQuery.findObjects(AttractionDetailsActivity.this, new FindListener<MyComment>() {
+        bmobQuery.findObjects(StrategyDetailsActivity.this, new FindListener<MyComment>() {
             TextView comment = (TextView) findViewById(R.id.comment);
 
             @Override
@@ -158,7 +156,7 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                 Intent sharingIntent = new Intent(Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 sharingIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share)
-                        + attraction.toString());
+                        + strategy.toString());
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_app)));
                 break;
             case R.id.action_download:

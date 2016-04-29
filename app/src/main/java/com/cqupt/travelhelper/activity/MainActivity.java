@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.fragment.AttractionFragment;
 import com.cqupt.travelhelper.fragment.MineFragment;
+import com.cqupt.travelhelper.fragment.StrategyFragment;
 
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         return new AttractionFragment();
                     case 1:
-                        return new AttractionFragment();
+                        return new StrategyFragment();
                     case 2:
                         return new AttractionFragment();
                     case 3:

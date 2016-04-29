@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,8 @@ public class MineFragment extends Fragment {
         name = (TextView) view.findViewById(R.id.name);
         LinearLayout downloadComment = (LinearLayout) view.findViewById(R.id.download_comment);
         downloadComment.setOnClickListener(new MyOnClick());
-        LinearLayout mineDownload = (LinearLayout) view.findViewById(R.id.mine_download);
-        mineDownload.setOnClickListener(new MyOnClick());
+        LinearLayout mineTravel = (LinearLayout) view.findViewById(R.id.mine_travel);
+        mineTravel.setOnClickListener(new MyOnClick());
         LinearLayout addTravel = (LinearLayout) view.findViewById(R.id.add_travel);
         addTravel.setOnClickListener(new MyOnClick());
         LinearLayout settings = (LinearLayout) view.findViewById(R.id.settings);
@@ -66,8 +65,8 @@ public class MineFragment extends Fragment {
                     Toast.makeText(getActivity(), "download_comment",
                             Toast.LENGTH_SHORT).show();
                     break;
-                case R.id.mine_download:
-                    Toast.makeText(getActivity(), "mine_download",
+                case R.id.mine_travel:
+                    Toast.makeText(getActivity(), "mine_travel",
                             Toast.LENGTH_SHORT).show();
                     break;
                 case R.id.add_travel:
@@ -121,9 +120,7 @@ public class MineFragment extends Fragment {
         else
             name.setText((String) MyUser.getObjectByKey(getActivity(), "username"));
     }
-
     private void setFaceImage(String url) {
-        Log.d("myLog", url);
         Glide.with(getActivity())
                 .load(url)
                 .centerCrop()

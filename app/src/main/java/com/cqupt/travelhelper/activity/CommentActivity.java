@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
-import com.cqupt.travelhelper.module.Attraction;
+import com.cqupt.travelhelper.module.Comment;
 import com.cqupt.travelhelper.module.MyComment;
 import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.utils.CommonUtil;
@@ -26,7 +26,7 @@ import cn.bmob.v3.listener.SaveListener;
 
 public class CommentActivity extends AppCompatActivity {
 
-    private Attraction attraction;
+    private Comment comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,20 +34,20 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        attraction = bundle.getParcelable("attraction");
+        comment = bundle.getParcelable("comment");
 
         ImageView picture = (ImageView) findViewById(R.id.picture);
         assert picture != null;
         Glide.with(CommentActivity.this)
-                .load(attraction.getPicture().getFileUrl(CommentActivity.this))
+                .load(comment.getPicture().getFileUrl(CommentActivity.this))
                 .placeholder(R.mipmap.loading)
                 .into(picture);
         TextView tv_dish_name = (TextView) findViewById(R.id.tv_title);
         assert tv_dish_name != null;
-        tv_dish_name.setText(attraction.getName());
+        tv_dish_name.setText(comment.getName());
         TextView tv_price = (TextView) findViewById(R.id.tv_price);
         assert tv_price != null;
-        tv_price.setText(attraction.getPrice());
+        tv_price.setText(comment.getPrice());
     }
 
     @Override
@@ -75,7 +75,7 @@ public class CommentActivity extends AppCompatActivity {
             RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
             assert comment != null;
             assert ratingBar != null;
-            @SuppressLint("DefaultLocale") MyComment myComment = new MyComment(attraction.getMyId()
+            @SuppressLint("DefaultLocale") MyComment myComment = new MyComment(this.comment.getMyId()
                     , MyUser.getObjectByKey(CommentActivity.this, "username") + ""
                     , comment.getText().toString().trim()
                     , String.format("%.1f", ratingBar.getRating()));
