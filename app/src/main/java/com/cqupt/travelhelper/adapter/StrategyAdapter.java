@@ -72,7 +72,7 @@ public class StrategyAdapter extends RecyclerView.Adapter<StrategyAdapter.ViewHo
             super(view);
             mView = view;
             picture = (ImageView) view.findViewById(R.id.picture);
-            name = (TextView) view.findViewById(R.id.name);
+            name = (TextView) view.findViewById(R.id.description);
         }
     }
 }

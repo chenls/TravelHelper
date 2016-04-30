@@ -32,7 +32,7 @@ public class MineFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_mine, container, false);
         pic = (ImageView) view.findViewById(R.id.pic);
         pic.setImageResource(R.mipmap.ic_face);
-        name = (TextView) view.findViewById(R.id.name);
+        name = (TextView) view.findViewById(R.id.description);
         LinearLayout downloadComment = (LinearLayout) view.findViewById(R.id.download_comment);
         downloadComment.setOnClickListener(new MyOnClick());
         LinearLayout mineTravel = (LinearLayout) view.findViewById(R.id.mine_travel);

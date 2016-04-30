@@ -69,7 +69,6 @@ public class AttractionDetailsActivity extends AppCompatActivity {
         collapsingToolbarLayout.setTitle(attraction.getName());
         ImageView picture = (ImageView) findViewById(R.id.picture);
         assert picture != null;
-//        picture.setImageResource(R.mipmap.loading);
         Glide.with(AttractionDetailsActivity.this)
                 .load(attraction.getPicture().getFileUrl(AttractionDetailsActivity.this))
                 .placeholder(R.mipmap.loading)

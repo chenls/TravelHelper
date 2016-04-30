@@ -17,6 +17,7 @@ import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.fragment.AttractionFragment;
 import com.cqupt.travelhelper.fragment.MineFragment;
 import com.cqupt.travelhelper.fragment.StrategyFragment;
+import com.cqupt.travelhelper.fragment.TravelsFragment;
 
 public class MainActivity extends AppCompatActivity {
     TabLayout tabLayout;
@@ -45,9 +46,9 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         return new AttractionFragment();
                     case 1:
-                        return new StrategyFragment();
+                        return new TravelsFragment();
                     case 2:
-                        return new AttractionFragment();
+                        return new StrategyFragment();
                     case 3:
                         return mineFragment;
                     default:
@@ -61,9 +62,9 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         return getString(R.string.attraction);
                     case 1:
-                        return getString(R.string.strategy);
-                    case 2:
                         return getString(R.string.travelogue);
+                    case 2:
+                        return getString(R.string.strategy);
                     case 3:
                         return getString(R.string.mine);
                     default:

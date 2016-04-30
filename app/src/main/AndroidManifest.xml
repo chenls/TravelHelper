@@ -98,14 +98,18 @@
             android:name=".activity.AttractionDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".activity.StrategyDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.TravelsDetailsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".activity.CommentActivity"
             android:label="@string/add_comment" />
         <activity
             android:name=".activity.SetInformationActivity"
             android:label="@string/SetInformation" />
-        <activity
-            android:name=".activity.StrategyDetailsActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+
     </application>
 
 </manifest>
