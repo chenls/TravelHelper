@@ -30,9 +30,6 @@
     <string name="action_download">下载</string>
     <string name="share_app">请选择</string>
     <string name="share">【旅游助手】APP下载地址：https://www.pgyer.com/Trave\n\n</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="download_comment">离线内容</string>
     <string name="mine_download">我的游记</string>
     <string name="add_travel">发布游记</string>
@@ -47,4 +44,8 @@
     <string name="take_time_title">用时参考</string>
     <string name="address_title">景点地址</string>
     <string name="traffic_title">交通路线</string>
+    <string name="description_title2">游记详情</string>
+    <string name="comment_title2">游记评论</string>
+    <string name="description_title3">攻略详情</string>
+    <string name="comment_title3">攻略评论</string>
 </resources>
