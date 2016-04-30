@@ -31,40 +31,20 @@ public class Strategy extends BmobObject implements Parcelable {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getTake_time() {
         return take_time;
-    }
-
-    public void setTake_time(String take_time) {
-        this.take_time = take_time;
     }
 
     public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getTraffic() {
         return traffic;
     }
 
-    public void setTraffic(String traffic) {
-        this.traffic = traffic;
-    }
-
     public String getPrice() {
         return price;
-    }
-
-    public void setPrice(String price) {
-        this.price = price;
     }
 
     public BmobFile getPicture() {
