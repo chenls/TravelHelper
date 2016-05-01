@@ -1,8 +1,10 @@
 package com.cqupt.travelhelper.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,13 +17,18 @@ import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.activity.TravelsDetailsActivity;
 import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.module.Travels;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.SDCardHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHolder> {
 
     private List<Travels> travelsList;
+    private ArrayList<String> allFileNames;
+    private boolean isCanDelete;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -58,6 +65,40 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
                 context.startActivity(intent);
             }
         });
+        if (isCanDelete) {
+            holder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    deleteMethod();
+                    return true;
+                }
+
+                private void deleteMethod() {
+                    //删除对话框
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setTitle(context.getString(R.string.delete));
+                    builder.setMessage(context.getString(R.string.sure_delete));
+                    builder.setPositiveButton(context.getString(R.string.sure), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            //删除
+                            int position = holder.getLayoutPosition();
+                            String fileName = allFileNames.get(position);
+                            DownloadSQLite.delete(context, fileName);
+                            SDCardHelper.deleteFile(fileName);
+                            travelsList.remove(position);
+                            notifyItemRemoved(position);
+                        }
+                    });
+                    builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    });
+                    builder.create().show();
+                }
+            });
+        }
     }
 
     @Override
@@ -65,8 +106,10 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
         return travelsList == null ? 0 : travelsList.size();
     }
 
-    public void setTravelsList(List<Travels> travelsList) {
+    public void setTravelsList(List<Travels> travelsList, boolean isCanDelete, ArrayList<String> allFileNames) {
         this.travelsList = travelsList;
+        this.allFileNames = allFileNames;
+        this.isCanDelete = isCanDelete;
         notifyDataSetChanged();
     }
 

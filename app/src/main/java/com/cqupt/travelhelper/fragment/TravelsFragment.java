@@ -12,6 +12,8 @@ import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.adapter.TravelsAdapter;
 import com.cqupt.travelhelper.module.Travels;
 import com.cqupt.travelhelper.utils.CommonUtil;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.ObjectUtil;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class TravelsFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int allIndex;
     private List<Travels> allTravelsList = new ArrayList<>();
+    private boolean isLocal;
+    private ArrayList<String> allFileNames = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,12 +41,16 @@ public class TravelsFragment extends Fragment {
         mPullLoadMoreRecyclerView.setLinearLayout();     //设置线性布局
         adapter = new TravelsAdapter();
         mPullLoadMoreRecyclerView.setAdapter(adapter);
-        queryAttraction(false, 0);
+        if (isLocal)
+            queryTravelsByLocal(0);
+        else
+            queryTravels(false, 0);
         mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
                 new PullLoadMoreRecyclerView.PullLoadMoreListener() {
                     @Override
                     public void onRefresh() {
-                        queryAttraction(true, 0);
+                        if (!isLocal)
+                            queryTravels(true, 0);
                         mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
 
@@ -51,16 +59,49 @@ public class TravelsFragment extends Fragment {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                queryAttraction(false, allIndex);
+                                if (isLocal)
+                                    queryTravelsByLocal(allIndex);
+                                else
+                                    queryTravels(false, allIndex);
                                 mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                             }
-                        },1000); //延时1秒，为了清楚的看到加载过程
+                        }, 1000); //延时1秒，为了清楚的看到加载过程
                     }
                 });
         return view;
     }
 
-    private void queryAttraction(final boolean refresh, int index) {
+    public static TravelsFragment newInstance(boolean isLocal) {
+        TravelsFragment fragment = new TravelsFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isLocal", isLocal);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null)
+            isLocal = getArguments().getBoolean("isLocal", false);
+    }
+
+    private void queryTravelsByLocal(int index) {
+        List<String> fileNames = DownloadSQLite.query(getActivity(), "travels", index);
+        List<Travels> travelsList = new ArrayList<>();
+        for (String fileName : fileNames) {
+            travelsList.add((Travels) ObjectUtil.readObjectFromFile(fileName));
+        }
+
+        allIndex = allIndex + 8;
+        allTravelsList.addAll(travelsList);
+        allFileNames.addAll(fileNames);
+        if (!travelsList.isEmpty())
+            adapter.setTravelsList(allTravelsList, true, allFileNames);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void queryTravels(final boolean refresh, int index) {
 
         if (!CommonUtil.checkNetState(getActivity())) {
             swipeRefreshLayout.setRefreshing(false);
@@ -93,7 +134,7 @@ public class TravelsFragment extends Fragment {
                 }
                 allIndex = allIndex + 8;
                 allTravelsList.addAll(travelsList);
-                adapter.setTravelsList(allTravelsList);
+                adapter.setTravelsList(allTravelsList, false, null);
                 swipeRefreshLayout.setRefreshing(false);
             }
 

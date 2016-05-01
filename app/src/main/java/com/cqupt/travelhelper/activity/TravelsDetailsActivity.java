@@ -1,5 +1,6 @@
 package com.cqupt.travelhelper.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
@@ -22,6 +24,9 @@ import com.cqupt.travelhelper.module.MyComment;
 import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.module.Travels;
 import com.cqupt.travelhelper.utils.CommonUtil;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.ObjectUtil;
+import com.cqupt.travelhelper.utils.SDCardHelper;
 
 import java.util.List;
 
@@ -78,13 +83,15 @@ public class TravelsDetailsActivity extends AppCompatActivity {
         MyUser myUser = travels.getMyUser();
         ImageView user_pic = (ImageView) findViewById(R.id.user_pic);
         assert user_pic != null;
-        Glide.with(TravelsDetailsActivity.this)
-                .load(myUser.getPic().getFileUrl(TravelsDetailsActivity.this))
-                .placeholder(R.mipmap.loading)
-                .into(user_pic);
-        TextView user_name = (TextView) findViewById(R.id.user_name);
-        assert user_name != null;
-        user_name.setText(myUser.getUsername());
+        if (myUser != null) {
+            Glide.with(TravelsDetailsActivity.this)
+                    .load(myUser.getPic().getFileUrl(TravelsDetailsActivity.this))
+                    .placeholder(R.mipmap.loading)
+                    .into(user_pic);
+            TextView user_name = (TextView) findViewById(R.id.user_name);
+            assert user_name != null;
+            user_name.setText(myUser.getUsername());
+        }
         queryMyComment();
     }
 
@@ -158,7 +165,14 @@ public class TravelsDetailsActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_app)));
                 break;
             case R.id.action_download:
-                //TODO 保存对象
+                Context context = TravelsDetailsActivity.this;
+                String filesDir = SDCardHelper.getSDCardPrivateFilesDir(context, "data");
+                if (filesDir != null) {
+                    String fileName = filesDir + "/" + travels.hashCode();
+                    DownloadSQLite.add(context, "travels", fileName);
+                    ObjectUtil.writeObjectToFile(travels, fileName);
+                    Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

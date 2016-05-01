@@ -12,6 +12,8 @@ import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.adapter.AttractionAdapter;
 import com.cqupt.travelhelper.module.Attraction;
 import com.cqupt.travelhelper.utils.CommonUtil;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.ObjectUtil;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class AttractionFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int allIndex;
     private List<Attraction> allAttractionList = new ArrayList<>();
+    private boolean isLocal;
+    private ArrayList<String> allFileNames = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,12 +41,16 @@ public class AttractionFragment extends Fragment {
         mPullLoadMoreRecyclerView.setGridLayout(2);     //设置网格布局
         adapter = new AttractionAdapter();
         mPullLoadMoreRecyclerView.setAdapter(adapter);
-        queryAttraction(false, 0);
+        if (isLocal)
+            queryAttractionByLocal(0);
+        else
+            queryAttraction(false, 0);
         mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
                 new PullLoadMoreRecyclerView.PullLoadMoreListener() {
                     @Override
                     public void onRefresh() {
-                        queryAttraction(true, 0);
+                        if (!isLocal)
+                            queryAttraction(true, 0);
                         mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
 
@@ -51,13 +59,45 @@ public class AttractionFragment extends Fragment {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                queryAttraction(false, allIndex);
+                                if (isLocal)
+                                    queryAttractionByLocal(allIndex);
+                                else
+                                    queryAttraction(false, allIndex);
                                 mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                             }
-                        },1000); //延时1秒，为了清楚的看到加载过程
+                        }, 1000); //延时1秒，为了清楚的看到加载过程
                     }
                 });
         return view;
+    }
+
+    public static AttractionFragment newInstance(boolean isLocal) {
+        AttractionFragment fragment = new AttractionFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isLocal", isLocal);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null)
+            isLocal = getArguments().getBoolean("isLocal", false);
+    }
+
+    private void queryAttractionByLocal(int index) {
+        List<String> fileNames = DownloadSQLite.query(getActivity(), "attraction", index);
+        List<Attraction> attractionList = new ArrayList<>();
+        for (String fileName : fileNames) {
+            attractionList.add((Attraction) ObjectUtil.readObjectFromFile(fileName));
+        }
+        allIndex = allIndex + 8;
+        allFileNames.addAll(fileNames);
+        allAttractionList.addAll(attractionList);
+        if (!attractionList.isEmpty())
+            adapter.setAttractionList(allAttractionList, true, allFileNames);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void queryAttraction(final boolean refresh, int index) {
@@ -92,7 +132,7 @@ public class AttractionFragment extends Fragment {
                 }
                 allIndex = allIndex + 8;
                 allAttractionList.addAll(attractionList);
-                adapter.setAttractionList(allAttractionList);
+                adapter.setAttractionList(allAttractionList, false, null);
                 swipeRefreshLayout.setRefreshing(false);
             }
 
@@ -102,4 +142,5 @@ public class AttractionFragment extends Fragment {
             }
         });
     }
+
 }

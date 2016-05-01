@@ -130,6 +130,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.MainActivity" />
         </activity>
+        <activity
+            android:name=".activity.DownloadCommentActivity"
+            android:label="@string/download_comment"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
-
 </manifest>

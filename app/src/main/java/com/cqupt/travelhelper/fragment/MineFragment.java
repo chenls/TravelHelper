@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.activity.AboutActivity;
+import com.cqupt.travelhelper.activity.DownloadCommentActivity;
 import com.cqupt.travelhelper.activity.SetInformationActivity;
 import com.cqupt.travelhelper.activity.SettingsActivity;
 import com.cqupt.travelhelper.activity.WelcomeActivity;
@@ -64,8 +65,8 @@ public class MineFragment extends Fragment {
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.download_comment:
-                    Toast.makeText(getActivity(), "download_comment",
-                            Toast.LENGTH_SHORT).show();
+                    Intent intent0 = new Intent(getActivity(), DownloadCommentActivity.class);
+                    startActivity(intent0);
                     break;
                 case R.id.mine_travel:
                     Toast.makeText(getActivity(), "mine_travel",

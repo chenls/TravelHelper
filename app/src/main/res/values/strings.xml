@@ -66,4 +66,6 @@
     <string name="notification_settings">通知设置</string>
     <string name="push_message">推送消息设置</string>
     <string name="push_message_content">接受商家推送信息</string>
+    <string name="delete">删除</string>
+    <string name="sure_delete">是否确定删除</string>
 </resources>

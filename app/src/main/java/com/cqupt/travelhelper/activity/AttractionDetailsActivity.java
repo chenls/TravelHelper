@@ -1,5 +1,6 @@
 package com.cqupt.travelhelper.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
@@ -22,6 +24,9 @@ import com.cqupt.travelhelper.module.Attraction;
 import com.cqupt.travelhelper.module.Comment;
 import com.cqupt.travelhelper.module.MyComment;
 import com.cqupt.travelhelper.utils.CommonUtil;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.ObjectUtil;
+import com.cqupt.travelhelper.utils.SDCardHelper;
 
 import java.util.List;
 
@@ -161,7 +166,14 @@ public class AttractionDetailsActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(sharingIntent, getString(R.string.share_app)));
                 break;
             case R.id.action_download:
-                //TODO 保存对象
+                Context context = AttractionDetailsActivity.this;
+                String filesDir = SDCardHelper.getSDCardPrivateFilesDir(context, "data");
+                if (filesDir != null) {
+                    String fileName = filesDir + "/" + attraction.hashCode();
+                    DownloadSQLite.add(context, "attraction", fileName);
+                    ObjectUtil.writeObjectToFile(attraction, fileName);
+                    Toast.makeText(context, "保存成功", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
         return super.onOptionsItemSelected(item);

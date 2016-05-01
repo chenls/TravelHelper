@@ -12,6 +12,8 @@ import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.adapter.StrategyAdapter;
 import com.cqupt.travelhelper.module.Strategy;
 import com.cqupt.travelhelper.utils.CommonUtil;
+import com.cqupt.travelhelper.utils.DownloadSQLite;
+import com.cqupt.travelhelper.utils.ObjectUtil;
 import com.wuxiaolong.pullloadmorerecyclerview.PullLoadMoreRecyclerView;
 
 import java.util.ArrayList;
@@ -26,6 +28,8 @@ public class StrategyFragment extends Fragment {
     private SwipeRefreshLayout swipeRefreshLayout;
     private int allIndex;
     private List<Strategy> allStrategyList = new ArrayList<>();
+    private boolean isLocal;
+    private ArrayList<String> allFileNames =new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,12 +41,16 @@ public class StrategyFragment extends Fragment {
         mPullLoadMoreRecyclerView.setGridLayout(2);     //设置网格布局
         adapter = new StrategyAdapter();
         mPullLoadMoreRecyclerView.setAdapter(adapter);
-        queryStrategy(false, 0);
+        if (isLocal)
+            queryStrategyByLocal(0);
+        else
+            queryStrategy(false, 0);
         mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
                 new PullLoadMoreRecyclerView.PullLoadMoreListener() {
                     @Override
                     public void onRefresh() {
-                        queryStrategy(true, 0);
+                        if (!isLocal)
+                            queryStrategy(true, 0);
                         mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                     }
 
@@ -51,13 +59,45 @@ public class StrategyFragment extends Fragment {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                queryStrategy(false, allIndex);
+                                if (isLocal)
+                                    queryStrategyByLocal(allIndex);
+                                else
+                                    queryStrategy(false, allIndex);
                                 mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
                             }
-                        },1000); //延时1秒，为了清楚的看到加载过程
+                        }, 1000); //延时1秒，为了清楚的看到加载过程
                     }
                 });
         return view;
+    }
+
+    public static StrategyFragment newInstance(boolean isLocal) {
+        StrategyFragment fragment = new StrategyFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isLocal", isLocal);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null)
+            isLocal = getArguments().getBoolean("isLocal", false);
+    }
+
+    private void queryStrategyByLocal(int index) {
+        List<String> fileNames = DownloadSQLite.query(getActivity(), "strategy", index);
+        List<Strategy> strategyList = new ArrayList<>();
+        for (String fileName : fileNames) {
+            strategyList.add((Strategy) ObjectUtil.readObjectFromFile(fileName));
+        }
+        allIndex = allIndex + 8;
+        allStrategyList.addAll(strategyList);
+        allFileNames.addAll(fileNames);
+        if (!strategyList.isEmpty())
+            adapter.setStrategyList(allStrategyList, true, allFileNames);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     private void queryStrategy(final boolean refresh, int index) {
@@ -92,7 +132,7 @@ public class StrategyFragment extends Fragment {
                 }
                 allIndex = allIndex + 8;
                 allStrategyList.addAll(strategyList);
-                adapter.setStrategyList(allStrategyList);
+                adapter.setStrategyList(allStrategyList, false, null);
                 swipeRefreshLayout.setRefreshing(false);
             }
 
