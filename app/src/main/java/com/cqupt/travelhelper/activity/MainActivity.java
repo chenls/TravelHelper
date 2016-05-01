@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
                 startActivity(intent);
                 break;
             case R.id.action_notifications:
@@ -93,11 +93,11 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.action_settings:
-                Intent intent3 = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent3 = new Intent(MainActivity.this, SettingsActivity.class);
                 startActivity(intent3);
                 break;
             case R.id.action_about:
-                Intent intent4 = new Intent(MainActivity.this, MainActivity.class);
+                Intent intent4 = new Intent(MainActivity.this, AboutActivity.class);
                 startActivity(intent4);
                 break;
         }

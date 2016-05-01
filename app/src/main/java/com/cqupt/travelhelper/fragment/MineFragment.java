@@ -16,7 +16,9 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
+import com.cqupt.travelhelper.activity.AboutActivity;
 import com.cqupt.travelhelper.activity.SetInformationActivity;
+import com.cqupt.travelhelper.activity.SettingsActivity;
 import com.cqupt.travelhelper.activity.WelcomeActivity;
 import com.cqupt.travelhelper.module.MyUser;
 
@@ -72,8 +74,12 @@ public class MineFragment extends Fragment {
                 case R.id.add_travel:
                     break;
                 case R.id.settings:
+                    Intent intent3 = new Intent(getActivity(), SettingsActivity.class);
+                    startActivity(intent3);
                     break;
                 case R.id.about:
+                    Intent intent4 = new Intent(getActivity(), AboutActivity.class);
+                    startActivity(intent4);
                     break;
                 case R.id.logout:
                     logoutMethod();
@@ -120,6 +126,7 @@ public class MineFragment extends Fragment {
         else
             name.setText((String) MyUser.getObjectByKey(getActivity(), "username"));
     }
+
     private void setFaceImage(String url) {
         Glide.with(getActivity())
                 .load(url)

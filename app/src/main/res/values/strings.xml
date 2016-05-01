@@ -48,4 +48,12 @@
     <string name="comment_title2">游记评论</string>
     <string name="description_title3">攻略详情</string>
     <string name="comment_title3">攻略评论</string>
+    <string name="about">关于</string>
+    <string name="settings">设置</string>
+    <string name="search">搜索</string>
+    <string name="version">版本号%s</string>
+    <string name="catchword">要么读书，要么旅行，\n身体和心灵总有一个要在路上。</string>
+    <string name="developer">开发者\n重庆邮电大学</string>
+    <string name="get_version_fail">获取失败</string>
+    <string name="share_title">分享</string>
 </resources>

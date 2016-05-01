@@ -12,75 +12,67 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
-import com.cqupt.travelhelper.activity.TravelsDetailsActivity;
-import com.cqupt.travelhelper.module.MyUser;
-import com.cqupt.travelhelper.module.Travels;
+import com.cqupt.travelhelper.activity.AttractionDetailsActivity;
+import com.cqupt.travelhelper.module.Attraction;
 
 import java.util.List;
 
 
-public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHolder> {
+public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
 
-    private List<Travels> travelsList;
+    private List<Attraction> attractionList;
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_travles, parent, false);
+                .inflate(R.layout.fragment_attraction, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Travels travels = travelsList.get(position);
-        final MyUser myUser = travels.getMyUser();
+        final Attraction attraction = attractionList.get(position);
         final Context context = holder.itemView.getContext();
         Glide.with(context)
-                .load(travels.getPicture().getFileUrl(context))
+                .load(attraction.getPicture().getFileUrl(context))
                 .placeholder(R.mipmap.loading)
                 .into(holder.picture);
-        holder.description.setText(travels.getDescription());
-        Glide.with(context)
-                .load(myUser.getPic().getFileUrl(context))
-                .placeholder(R.mipmap.loading)
-                .into(holder.user_pic);
-        holder.user_name.setText(myUser.getUsername());
+        holder.name.setText(attraction.getName());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, TravelsDetailsActivity.class);
+                Intent intent = new Intent(context, AttractionDetailsActivity.class);
                 Bundle bundle = new Bundle();
-                travels.setMyId(travels.getObjectId());
-                bundle.putParcelable("travels", travels);
+                attraction.setMyId(attraction.getObjectId());
+                bundle.putParcelable("attraction", attraction);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
+
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return travelsList == null ? 0 : travelsList.size();
+        return attractionList == null ? 0 : attractionList.size();
     }
 
-    public void setTravelsList(List<Travels> travelsList) {
-        this.travelsList = travelsList;
+    public void setAttractionList(List<Attraction> attractionList) {
+        this.attractionList = attractionList;
         notifyDataSetChanged();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public final View mView;
-        public final ImageView picture, user_pic;
-        public final TextView description, user_name;
+        public final ImageView picture;
+        public final TextView name;
 
         public ViewHolder(View view) {
             super(view);
             mView = view;
             picture = (ImageView) view.findViewById(R.id.picture);
-            description = (TextView) view.findViewById(R.id.description);
-            user_pic = (ImageView) view.findViewById(R.id.user_pic);
-            user_name = (TextView) view.findViewById(R.id.user_name);
+            name = (TextView) view.findViewById(R.id.description);
         }
     }
 }
