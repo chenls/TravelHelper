@@ -56,4 +56,14 @@
     <string name="developer">开发者\n重庆邮电大学</string>
     <string name="get_version_fail">获取失败</string>
     <string name="share_title">分享</string>
+    <string name="base_settings">基本设置</string>
+    <string name="shake_send_feedback">摇一摇发送反馈</string>
+    <string name="shake_send_feedback_content">遇到问题？摇一摇手机就能反馈～</string>
+    <string name="auto_update">自动更新软件</string>
+    <string name="auto_update_content">使用WIFI时，自动下载更新包</string>
+    <string name="back_mode">退出模式设置</string>
+    <string name="back_mode_content">双击返回键，退出程序</string>
+    <string name="notification_settings">通知设置</string>
+    <string name="push_message">推送消息设置</string>
+    <string name="push_message_content">接受商家推送信息</string>
 </resources>
