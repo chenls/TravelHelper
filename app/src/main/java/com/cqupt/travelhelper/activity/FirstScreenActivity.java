@@ -23,7 +23,7 @@ public class FirstScreenActivity extends AppCompatActivity {
                         WelcomeActivity.class));
                 finish();
             }
-        }.sendEmptyMessageDelayed(0, 10);//TODO 开发完成时，把10更新为1000
+        }.sendEmptyMessageDelayed(0, 1000);
     }
 
     @Override

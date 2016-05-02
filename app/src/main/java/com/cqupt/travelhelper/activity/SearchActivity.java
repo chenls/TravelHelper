@@ -54,6 +54,7 @@ public class SearchActivity extends AppCompatActivity {
         final MenuItem item = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
         assert searchView != null;
+        searchView.setQueryHint("搜索景点、攻略、游记");
         searchView.setIconified(false);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
