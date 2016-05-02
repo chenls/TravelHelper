@@ -137,8 +137,9 @@ public class TravelsDetailsActivity extends AppCompatActivity {
                 int length = commentValue.length();
                 if (length > 2) {
                     commentValue.delete(length - 2, length);//删除最后两个\n\n字符
-                }
-                comment.setText(commentValue);
+                    comment.setText(commentValue);
+                } else
+                    comment.setText(R.string.no_comment);
             }
 
             @Override
