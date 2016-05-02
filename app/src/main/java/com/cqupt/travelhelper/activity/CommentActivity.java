@@ -42,9 +42,9 @@ public class CommentActivity extends AppCompatActivity {
                 .load(comment.getPicture().getFileUrl(CommentActivity.this))
                 .placeholder(R.mipmap.loading)
                 .into(picture);
-        TextView tv_dish_name = (TextView) findViewById(R.id.tv_title);
-        assert tv_dish_name != null;
-        tv_dish_name.setText(comment.getName());
+        TextView tv_title = (TextView) findViewById(R.id.tv_title);
+        assert tv_title != null;
+        tv_title.setText(comment.getName());
         TextView tv_price = (TextView) findViewById(R.id.tv_price);
         assert tv_price != null;
         tv_price.setText(comment.getPrice());

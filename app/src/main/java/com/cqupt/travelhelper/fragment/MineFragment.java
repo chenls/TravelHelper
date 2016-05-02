@@ -29,35 +29,38 @@ import cn.bmob.v3.datatype.BmobFile;
 public class MineFragment extends Fragment {
     private ImageView pic;
     private TextView name;
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_mine, container, false);
-        pic = (ImageView) view.findViewById(R.id.pic);
-        pic.setImageResource(R.mipmap.ic_face);
-        name = (TextView) view.findViewById(R.id.description);
-        LinearLayout downloadComment = (LinearLayout) view.findViewById(R.id.download_comment);
-        downloadComment.setOnClickListener(new MyOnClick());
-        LinearLayout mineTravel = (LinearLayout) view.findViewById(R.id.mine_travel);
-        mineTravel.setOnClickListener(new MyOnClick());
-        LinearLayout addTravel = (LinearLayout) view.findViewById(R.id.add_travel);
-        addTravel.setOnClickListener(new MyOnClick());
-        LinearLayout settings = (LinearLayout) view.findViewById(R.id.settings);
-        settings.setOnClickListener(new MyOnClick());
-        LinearLayout about = (LinearLayout) view.findViewById(R.id.about);
-        about.setOnClickListener(new MyOnClick());
-        LinearLayout logout = (LinearLayout) view.findViewById(R.id.logout);
-        logout.setOnClickListener(new MyOnClick());
-        changeInformation(null, null);
-        pic.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), SetInformationActivity.class);
-                getActivity().startActivityForResult(intent, 1);
-            }
-        });
-        return view;
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_mine, container, false);
+            pic = (ImageView) rootView.findViewById(R.id.pic);
+            pic.setImageResource(R.mipmap.ic_face);
+            name = (TextView) rootView.findViewById(R.id.description);
+            LinearLayout downloadComment = (LinearLayout) rootView.findViewById(R.id.download_comment);
+            downloadComment.setOnClickListener(new MyOnClick());
+            LinearLayout mineTravel = (LinearLayout) rootView.findViewById(R.id.mine_travel);
+            mineTravel.setOnClickListener(new MyOnClick());
+            LinearLayout addTravel = (LinearLayout) rootView.findViewById(R.id.add_travel);
+            addTravel.setOnClickListener(new MyOnClick());
+            LinearLayout settings = (LinearLayout) rootView.findViewById(R.id.settings);
+            settings.setOnClickListener(new MyOnClick());
+            LinearLayout about = (LinearLayout) rootView.findViewById(R.id.about);
+            about.setOnClickListener(new MyOnClick());
+            LinearLayout logout = (LinearLayout) rootView.findViewById(R.id.logout);
+            logout.setOnClickListener(new MyOnClick());
+            changeInformation(null, null);
+            pic.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), SetInformationActivity.class);
+                    getActivity().startActivityForResult(intent, 1);
+                }
+            });
+        }
+        return rootView;
     }
 
     class MyOnClick implements View.OnClickListener {
@@ -137,5 +140,13 @@ public class MineFragment extends Fragment {
                 .centerCrop()
                 .placeholder(R.mipmap.loading)
                 .into(pic);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
     }
 }

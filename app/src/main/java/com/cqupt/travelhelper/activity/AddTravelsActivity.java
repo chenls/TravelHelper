@@ -3,7 +3,6 @@ package com.cqupt.travelhelper.activity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,14 +18,13 @@ import android.widget.Toast;
 
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
+import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.module.Travels;
 import com.cqupt.travelhelper.utils.CommonUtil;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 import cn.bmob.v3.BmobUser;
 import cn.bmob.v3.datatype.BmobFile;
@@ -94,14 +92,11 @@ public class AddTravelsActivity extends AppCompatActivity {
                     startPhotoZoom(Uri.fromFile(picture_file));
                     break;
                 case PHOTO_ZOOM:
-                    if (data != null) {
-                        Bundle extras = data.getExtras();
-                        if (extras != null) {
-                            Bitmap photo = extras.getParcelable("data");
-                            saveMyBitmap(photo);
-                            image.setImageBitmap(photo);
-                        }
-                    }
+                    if (picture_file != null)
+                        Glide.with(AddTravelsActivity.this)
+                                .load(picture_file)
+                                .placeholder(R.mipmap.loading)
+                                .into(image);
                     break;
             }
         }
@@ -122,26 +117,11 @@ public class AddTravelsActivity extends AppCompatActivity {
         intent.putExtra("aspectX", 4);
         intent.putExtra("aspectY", 3);
         // outputX outputY 是裁剪图片宽高
-        intent.putExtra("outputX", 80);
-        intent.putExtra("outputY", 60);
-        intent.putExtra("return-data", true);
+        intent.putExtra("outputX", 800);
+        intent.putExtra("outputY", 600);
+        intent.putExtra("return-data", false); //不返回数据
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(picture_file)); //输出路径
         startActivityForResult(intent, PHOTO_ZOOM);
-    }
-
-    /**
-     * 保存裁剪后的图片
-     *
-     * @param mBitmap 位图
-     */
-    public void saveMyBitmap(Bitmap mBitmap) {
-        try {
-            FileOutputStream fOut = new FileOutputStream(picture_file);
-            mBitmap.compress(Bitmap.CompressFormat.JPEG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override
@@ -183,13 +163,11 @@ public class AddTravelsActivity extends AppCompatActivity {
                 .upload(picture_file.getAbsolutePath(), new UploadListener() {
                     @Override
                     public void onSuccess(String fileName, String url, BmobFile file) {
-                        Toast.makeText(AddTravelsActivity.this, file + "", Toast.LENGTH_SHORT).show();
                         addTravels(file); //图片绑定到用户上
                     }
 
                     @Override
                     public void onProgress(int ratio) {
-                        Toast.makeText(AddTravelsActivity.this, ratio + "", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -211,6 +189,7 @@ public class AddTravelsActivity extends AppCompatActivity {
             public void onSuccess() {
                 progressDialog.dismiss();
                 Toast.makeText(AddTravelsActivity.this, "发布游记成功", Toast.LENGTH_SHORT).show();
+                finish();
             }
 
             @Override

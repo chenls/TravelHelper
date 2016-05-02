@@ -30,45 +30,48 @@ public class AttractionFragment extends Fragment {
     private List<Attraction> allAttractionList = new ArrayList<>();
     private boolean isLocal;
     private ArrayList<String> allFileNames = new ArrayList<>();
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_attraction_list, container, false);
-        final PullLoadMoreRecyclerView mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView)
-                view.findViewById(R.id.pullLoadMoreRecyclerView);
-        swipeRefreshLayout = mPullLoadMoreRecyclerView.getSwipeRefreshLayout();
-        mPullLoadMoreRecyclerView.setGridLayout(2);     //设置网格布局
-        adapter = new AttractionAdapter();
-        mPullLoadMoreRecyclerView.setAdapter(adapter);
-        if (isLocal)
-            queryAttractionByLocal(0);
-        else
-            queryAttraction(false, 0);
-        mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
-                new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-                    @Override
-                    public void onRefresh() {
-                        if (!isLocal)
-                            queryAttraction(true, 0);
-                        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
-                    }
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_attraction_list, container, false);
+            final PullLoadMoreRecyclerView mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView)
+                    rootView.findViewById(R.id.pullLoadMoreRecyclerView);
+            swipeRefreshLayout = mPullLoadMoreRecyclerView.getSwipeRefreshLayout();
+            mPullLoadMoreRecyclerView.setGridLayout(2);     //设置网格布局
+            adapter = new AttractionAdapter();
+            mPullLoadMoreRecyclerView.setAdapter(adapter);
+            if (isLocal)
+                queryAttractionByLocal(0);
+            else
+                queryAttraction(false, 0);
+            mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
+                    new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+                        @Override
+                        public void onRefresh() {
+                            if (!isLocal)
+                                queryAttraction(true, 0);
+                            mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                        }
 
-                    @Override
-                    public void onLoadMore() {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (isLocal)
-                                    queryAttractionByLocal(allIndex);
-                                else
-                                    queryAttraction(false, allIndex);
-                                mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
-                            }
-                        }, 1000); //延时1秒，为了清楚的看到加载过程
-                    }
-                });
-        return view;
+                        @Override
+                        public void onLoadMore() {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (isLocal)
+                                        queryAttractionByLocal(allIndex);
+                                    else
+                                        queryAttraction(false, allIndex);
+                                    mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                                }
+                            }, 1000); //延时1秒，为了清楚的看到加载过程
+                        }
+                    });
+        }
+        return rootView;
     }
 
     public static AttractionFragment newInstance(boolean isLocal) {
@@ -143,4 +146,11 @@ public class AttractionFragment extends Fragment {
         });
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+    }
 }

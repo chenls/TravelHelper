@@ -43,7 +43,7 @@ public class MyApplication extends Application {
      * @param context context
      */
     public static void initConfig(Context context) {
-        BmobConfiguration config = new BmobConfiguration.Builder(context).customExternalCacheDir("dish").build();
+        BmobConfiguration config = new BmobConfiguration.Builder(context).customExternalCacheDir("download").build();
         BmobPro.getInstance(context).initConfig(config);
     }
 

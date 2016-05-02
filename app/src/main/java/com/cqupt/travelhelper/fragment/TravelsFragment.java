@@ -32,45 +32,48 @@ public class TravelsFragment extends Fragment {
     private boolean isLocal;
     private ArrayList<String> allFileNames = new ArrayList<>();
     private boolean isMine;
+    private View rootView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_travels_list, container, false);
-        final PullLoadMoreRecyclerView mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView)
-                view.findViewById(R.id.pullLoadMoreRecyclerView);
-        swipeRefreshLayout = mPullLoadMoreRecyclerView.getSwipeRefreshLayout();
-        mPullLoadMoreRecyclerView.setLinearLayout();     //设置线性布局
-        adapter = new TravelsAdapter();
-        mPullLoadMoreRecyclerView.setAdapter(adapter);
-        if (isLocal)
-            queryTravelsByLocal(0);
-        else
-            queryTravels(false, 0);
-        mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
-                new PullLoadMoreRecyclerView.PullLoadMoreListener() {
-                    @Override
-                    public void onRefresh() {
-                        if (!isLocal)
-                            queryTravels(true, 0);
-                        mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
-                    }
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_travels_list, container, false);
+            final PullLoadMoreRecyclerView mPullLoadMoreRecyclerView = (PullLoadMoreRecyclerView)
+                    rootView.findViewById(R.id.pullLoadMoreRecyclerView);
+            swipeRefreshLayout = mPullLoadMoreRecyclerView.getSwipeRefreshLayout();
+            mPullLoadMoreRecyclerView.setLinearLayout();     //设置线性布局
+            adapter = new TravelsAdapter();
+            mPullLoadMoreRecyclerView.setAdapter(adapter);
+            if (isLocal)
+                queryTravelsByLocal(0);
+            else
+                queryTravels(false, 0);
+            mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
+                    new PullLoadMoreRecyclerView.PullLoadMoreListener() {
+                        @Override
+                        public void onRefresh() {
+                            if (!isLocal)
+                                queryTravels(true, 0);
+                            mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                        }
 
-                    @Override
-                    public void onLoadMore() {
-                        new Handler().postDelayed(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (isLocal)
-                                    queryTravelsByLocal(allIndex);
-                                else
-                                    queryTravels(false, allIndex);
-                                mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
-                            }
-                        }, 1000); //延时1秒，为了清楚的看到加载过程
-                    }
-                });
-        return view;
+                        @Override
+                        public void onLoadMore() {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (isLocal)
+                                        queryTravelsByLocal(allIndex);
+                                    else
+                                        queryTravels(false, allIndex);
+                                    mPullLoadMoreRecyclerView.setPullLoadMoreCompleted();
+                                }
+                            }, 1000); //延时1秒，为了清楚的看到加载过程
+                        }
+                    });
+        }
+        return rootView;
     }
 
     public static TravelsFragment newInstanceMine(boolean isMine) {
@@ -159,5 +162,13 @@ public class TravelsFragment extends Fragment {
                 swipeRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
     }
 }
