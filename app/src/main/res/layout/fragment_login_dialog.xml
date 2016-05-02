@@ -14,20 +14,30 @@
         android:text="@string/login"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/et_user_data"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:hint="@string/phoneNumOrUserName" />
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/et_userpwd"
+        <EditText
+            android:id="@+id/et_user_data"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:hint="@string/phoneNumOrUserName" />
+    </android.support.design.widget.TextInputLayout>
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_userpwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"

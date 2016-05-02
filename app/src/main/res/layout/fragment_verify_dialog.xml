@@ -14,30 +14,41 @@
         android:text="@string/register"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <EditText
-        android:id="@+id/et_phone_number"
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="5dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="@string/phone_num"
-        android:inputType="phone" />
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/et_phone_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="@string/phone_num"
+            android:inputType="phone" />
+    </android.support.design.widget.TextInputLayout>
+
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <EditText
-            android:id="@+id/et_verify_sms_code"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_toLeftOf="@+id/re_send"
-            android:layout_toStartOf="@+id/re_send"
-            android:hint="@string/verify_sms_code"
-            android:inputType="number" />
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/et_verify_sms_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_toLeftOf="@+id/re_send"
+                android:layout_toStartOf="@+id/re_send"
+                android:hint="@string/verify_sms_code"
+                android:inputType="number" />
+        </android.support.design.widget.TextInputLayout>
 
         <TextView
             android:id="@+id/re_send"
