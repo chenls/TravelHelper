@@ -48,7 +48,7 @@ public class DownloadCommentActivity extends AppCompatActivity {
                     case 0:
                         return AttractionFragment.newInstance(true);
                     case 1:
-                        return TravelsFragment.newInstance(true);
+                        return TravelsFragment.newInstanceLocal(true);
                     case 2:
                         return StrategyFragment.newInstance(true);
                     default:

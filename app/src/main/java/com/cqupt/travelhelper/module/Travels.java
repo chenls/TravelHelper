@@ -12,6 +12,12 @@ public class Travels extends BmobObject implements Parcelable {
     BmobFile picture;
     MyUser myUser;
 
+    public Travels(String description, BmobFile picture, MyUser myUser) {
+        this.description = description;
+        this.picture = picture;
+        this.myUser = myUser;
+    }
+
     protected Travels(Parcel in) {
         myId = in.readString();
         picture = (BmobFile) in.readSerializable();

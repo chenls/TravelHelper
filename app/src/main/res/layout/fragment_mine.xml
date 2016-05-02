@@ -90,7 +90,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginLeft="10dp"
                     android:layout_marginStart="10dp"
-                    android:text="@string/mine_download"
+                    android:text="@string/my_travels"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="@color/colorLightBlack" />
             </LinearLayout>

@@ -12,12 +12,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.activity.AboutActivity;
+import com.cqupt.travelhelper.activity.AddTravelsActivity;
 import com.cqupt.travelhelper.activity.DownloadCommentActivity;
+import com.cqupt.travelhelper.activity.MyTravelsActivity;
 import com.cqupt.travelhelper.activity.SetInformationActivity;
 import com.cqupt.travelhelper.activity.SettingsActivity;
 import com.cqupt.travelhelper.activity.WelcomeActivity;
@@ -69,10 +70,12 @@ public class MineFragment extends Fragment {
                     startActivity(intent0);
                     break;
                 case R.id.mine_travel:
-                    Toast.makeText(getActivity(), "mine_travel",
-                            Toast.LENGTH_SHORT).show();
+                    Intent intent1 = new Intent(getActivity(), MyTravelsActivity.class);
+                    startActivity(intent1);
                     break;
                 case R.id.add_travel:
+                    Intent intent2 = new Intent(getActivity(), AddTravelsActivity.class);
+                    startActivity(intent2);
                     break;
                 case R.id.settings:
                     Intent intent3 = new Intent(getActivity(), SettingsActivity.class);

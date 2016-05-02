@@ -134,5 +134,20 @@
             android:name=".activity.DownloadCommentActivity"
             android:label="@string/download_comment"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activity.MyTravelsActivity"
+            android:label="@string/my_travels">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
+        <activity
+            android:name=".activity.AddTravelsActivity"
+            android:label="@string/add_travel">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activity.MainActivity" />
+        </activity>
     </application>
+
 </manifest>

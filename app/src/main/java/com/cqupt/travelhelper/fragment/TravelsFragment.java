@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.adapter.TravelsAdapter;
+import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.module.Travels;
 import com.cqupt.travelhelper.utils.CommonUtil;
 import com.cqupt.travelhelper.utils.DownloadSQLite;
@@ -30,6 +31,7 @@ public class TravelsFragment extends Fragment {
     private List<Travels> allTravelsList = new ArrayList<>();
     private boolean isLocal;
     private ArrayList<String> allFileNames = new ArrayList<>();
+    private boolean isMine;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,7 +73,15 @@ public class TravelsFragment extends Fragment {
         return view;
     }
 
-    public static TravelsFragment newInstance(boolean isLocal) {
+    public static TravelsFragment newInstanceMine(boolean isMine) {
+        TravelsFragment fragment = new TravelsFragment();
+        Bundle args = new Bundle();
+        args.putBoolean("isMine", isMine);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static TravelsFragment newInstanceLocal(boolean isLocal) {
         TravelsFragment fragment = new TravelsFragment();
         Bundle args = new Bundle();
         args.putBoolean("isLocal", isLocal);
@@ -82,8 +92,10 @@ public class TravelsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null)
+        if (getArguments() != null) {
             isLocal = getArguments().getBoolean("isLocal", false);
+            isMine = getArguments().getBoolean("isMine", false);
+        }
     }
 
     private void queryTravelsByLocal(int index) {
@@ -111,6 +123,10 @@ public class TravelsFragment extends Fragment {
         bmobQuery.setSkip(index);
         bmobQuery.setLimit(8);
         bmobQuery.include("myUser");// 希望在查询游记信息的同时也把发布人的信息查询出来
+        if (isMine) {
+            MyUser myUser = MyUser.getCurrentUser(getActivity(), MyUser.class);
+            bmobQuery.addWhereEqualTo("myUser", myUser);
+        }
         bmobQuery.order("createdAt"); //按创建时间排序
         //先判断是否强制刷新
         if (refresh) {
