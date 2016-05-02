@@ -83,15 +83,15 @@ public class TravelsDetailsActivity extends AppCompatActivity {
         MyUser myUser = travels.getMyUser();
         ImageView user_pic = (ImageView) findViewById(R.id.user_pic);
         assert user_pic != null;
-        if (myUser != null) {
+        if (myUser.getPic() != null) {
             Glide.with(TravelsDetailsActivity.this)
                     .load(myUser.getPic().getFileUrl(TravelsDetailsActivity.this))
                     .placeholder(R.mipmap.loading)
                     .into(user_pic);
-            TextView user_name = (TextView) findViewById(R.id.user_name);
-            assert user_name != null;
-            user_name.setText(myUser.getUsername());
         }
+        TextView user_name = (TextView) findViewById(R.id.user_name);
+        assert user_name != null;
+        user_name.setText(myUser.getUsername());
         queryMyComment();
     }
 

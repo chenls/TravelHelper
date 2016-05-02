@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.bmob.BmobProFile;
 import com.bmob.btp.callback.UploadListener;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.cqupt.travelhelper.R;
 import com.cqupt.travelhelper.module.MyUser;
 import com.cqupt.travelhelper.module.Travels;
@@ -38,7 +39,6 @@ public class AddTravelsActivity extends AppCompatActivity {
     private static final int GALLERY = 1;
     private static final int CAMERA = 2;
     private static final int PHOTO_ZOOM = 3;
-    private static final String PICTURE_NAME = "travelPicture.jpg";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +56,7 @@ public class AddTravelsActivity extends AppCompatActivity {
                 builder.setSingleChoiceItems(s, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        picture_file = new File(AddTravelsActivity.this.getExternalCacheDir(), PICTURE_NAME);
+                        picture_file = new File(AddTravelsActivity.this.getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
                         switch (which) {
                             case 0:
                                 Intent intent = new Intent(Intent.ACTION_PICK, null);
@@ -92,11 +92,12 @@ public class AddTravelsActivity extends AppCompatActivity {
                     startPhotoZoom(Uri.fromFile(picture_file));
                     break;
                 case PHOTO_ZOOM:
-                    if (picture_file != null)
-                        Glide.with(AddTravelsActivity.this)
-                                .load(picture_file)
-                                .placeholder(R.mipmap.loading)
-                                .into(image);
+
+                    Glide.with(AddTravelsActivity.this)
+                            .load(picture_file)
+                            .placeholder(R.mipmap.loading)
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)//不缓存
+                            .into(image);
                     break;
             }
         }

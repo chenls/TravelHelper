@@ -47,13 +47,13 @@ public class TravelsAdapter extends RecyclerView.Adapter<TravelsAdapter.ViewHold
                 .placeholder(R.mipmap.loading)
                 .into(holder.picture);
         holder.description.setText(travels.getDescription());
-        if (myUser != null) {
+        if (myUser.getPic() != null) {
             Glide.with(context)
                     .load(myUser.getPic().getFileUrl(context))
                     .placeholder(R.mipmap.loading)
                     .into(holder.user_pic);
-            holder.user_name.setText(myUser.getUsername());
         }
+        holder.user_name.setText(myUser.getUsername());
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

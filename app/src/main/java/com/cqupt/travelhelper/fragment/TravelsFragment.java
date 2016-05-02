@@ -48,7 +48,7 @@ public class TravelsFragment extends Fragment {
             if (isLocal)
                 queryTravelsByLocal(0);
             else
-                queryTravels(false, 0);
+                queryTravels(true, 0);
             mPullLoadMoreRecyclerView.setOnPullLoadMoreListener(
                     new PullLoadMoreRecyclerView.PullLoadMoreListener() {
                         @Override
