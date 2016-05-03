@@ -1,17 +1,21 @@
-# Add project specific ProGuard rules here.
-# By default, the flags in this file are appended to flags specified
-# in /usr/android/android-sdk/tools/proguard/proguard-android.txt
-# You can edit the include path and order by changing the proguardFiles
-# directive in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+-dontwarn android.support.**   # 如果引用了v4或者v7包
+-keep class android.support.** {*;} #对于v4或者v7中的类不进行代码混淆
+-optimizationpasses 5          # 指定代码的压缩级别
+-dontusemixedcaseclassnames    # 是否使用大小写混合
+-dontpreverify                 # 混淆时是否做预校验
+-verbose                       # 混淆时是否记录日志
+-ignorewarnings
+-keep class c.b.** {*;}
+-keep class com.pgyersdk.** {*;}
+-dontwarn com.pgyersdk.**
+-keepattributes Signature
+-keep class cn.bmob.v3.** {*;}
 
-# Add any project specific keep options here:
-
-# If your project uses WebView with JS, uncomment the following
-# and specify the fully qualified class name to the JavaScript interface
-# class:
-#-keepclassmembers class fqcn.of.javascript.interface.for.webview {
-#   public *;
-#}
+# 保证继承自BmobObject、BmobUser类的JavaBean不被混淆
+-keep class com.cqupt.travelhelper.module.Attraction{*;}
+-keep class com.cqupt.travelhelper.module.Comment{*;}
+-keep class com.cqupt.travelhelper.module.MyComment{*;}
+-keep class com.cqupt.travelhelper.module.MyUser{*;}
+-keep class com.cqupt.travelhelper.module.Notify{*;}
+-keep class com.cqupt.travelhelper.module.Strategy{*;}
+-keep class com.cqupt.travelhelper.module.Travels{*;}
